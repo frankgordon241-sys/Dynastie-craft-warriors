@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>Dynastie Craft Warriors</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center;
+      padding: 24px; color: #f5f7fb;
+      font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+      background: radial-gradient(circle at top, #263b5d, #101827 62%);
+    }
+    main {
+      width: min(100%, 720px); padding: clamp(28px, 6vw, 56px);
+      border: 1px solid #536783; border-radius: 24px;
+      background: rgba(12, 22, 38, .88); box-shadow: 0 24px 80px #0008;
+      text-align: center;
+    }
+    .mark { font-size: 48px; margin-bottom: 12px; }
+    h1 { margin: 0 0 12px; font-size: clamp(30px, 6vw, 48px); }
+    p { color: #c4d0e0; line-height: 1.7; }
+    .status {
+      display: inline-flex; gap: 9px; align-items: center; margin-top: 20px;
+      padding: 10px 16px; border: 1px solid #397b60; border-radius: 999px;
+      color: #a8f0c9; background: #153b2d;
+    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: #55dc91; }
+    footer { margin-top: 28px; color: #8293aa; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="mark" aria-hidden="true">⚔️</div>
+    <h1>Dynastie Craft Warriors</h1>
+    <p>Le dépôt du jeu est maintenant connecté et prêt pour le développement.</p>
+    <div class="status"><span class="dot"></span> Test d’écriture GitHub réussi</div>
+    <p>Cette page est une base de vérification technique. Le jeu complet et ses fonctionnalités seront intégrés à partir de ton code source et de tes consignes.</p>
+    <footer>Projet en développement · Version de test 0.1</footer>
+  </main>
+</body>
+</html>
