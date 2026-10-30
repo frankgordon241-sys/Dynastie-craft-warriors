@@ -1,44 +1,46 @@
 <!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101827">
-  <title>Dynastie Craft Warriors</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; min-height: 100vh; display: grid; place-items: center;
-      padding: 24px; color: #f5f7fb;
-      font-family: system-ui, -apple-system, Segoe UI, sans-serif;
-      background: radial-gradient(circle at top, #263b5d, #101827 62%);
-    }
-    main {
-      width: min(100%, 720px); padding: clamp(28px, 6vw, 56px);
-      border: 1px solid #536783; border-radius: 24px;
-      background: rgba(12, 22, 38, .88); box-shadow: 0 24px 80px #0008;
-      text-align: center;
-    }
-    .mark { font-size: 48px; margin-bottom: 12px; }
-    h1 { margin: 0 0 12px; font-size: clamp(30px, 6vw, 48px); }
-    p { color: #c4d0e0; line-height: 1.7; }
-    .status {
-      display: inline-flex; gap: 9px; align-items: center; margin-top: 20px;
-      padding: 10px 16px; border: 1px solid #397b60; border-radius: 999px;
-      color: #a8f0c9; background: #153b2d;
-    }
-    .dot { width: 9px; height: 9px; border-radius: 50%; background: #55dc91; }
-    footer { margin-top: 28px; color: #8293aa; font-size: 13px; }
-  </style>
-</head>
-<body>
-  <main>
-    <div class="mark" aria-hidden="true">⚔️</div>
-    <h1>Dynastie Craft Warriors</h1>
-    <p>Le dépôt du jeu est maintenant connecté et prêt pour le développement.</p>
-    <div class="status"><span class="dot"></span> Test d’écriture GitHub réussi</div>
-    <p>Cette page est une base de vérification technique. Le jeu complet et ses fonctionnalités seront intégrés à partir de ton code source et de tes consignes.</p>
-    <footer>Projet en développement · Version de test 0.1</footer>
-  </main>
-</body>
-</html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#17120f"><title>Dynastie Craft Warriors</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#17120f;color:#fff;font-family:monospace;touch-action:none;user-select:none}#game{height:100dvh;max-width:520px;margin:auto;display:flex;flex-direction:column;background:#17120f}#hud{height:48px;flex:none;display:flex;align-items:center;justify-content:space-around;background:#090909;border-bottom:2px solid #a67c38;font-weight:bold;font-size:14px}#scene{width:100%;aspect-ratio:1;max-height:calc(100dvh - 290px);object-fit:contain;background:#263b22;image-rendering:pixelated;display:block}#story{height:66px;flex:none;background:#332319;border:3px ridge #bda16a;margin:4px 6px;padding:6px;font-size:12px;line-height:1.35;overflow:hidden}#story strong{display:block;color:#ffd76b;margin-bottom:3px}#controls{position:relative;flex:1;min-height:180px;background:linear-gradient(#241a15,#100c0a)}#pad{position:absolute;left:15px;bottom:15px;width:130px;height:130px;border-radius:50%;background:#71463e;border:5px solid #c3a16b;touch-action:none}#nub{position:absolute;width:48px;height:48px;border-radius:50%;background:#17120f;border:3px solid #eee;left:36px;top:36px;pointer-events:none}#actions{position:absolute;right:12px;bottom:12px;width:178px;height:165px}button{font: bold 14px monospace;color:#fff;background:#473323;border:3px solid #d6b36d;border-radius:8px;padding:8px;touch-action:none}button:active,.active{filter:brightness(1.5);transform:scale(.96)}.act{position:absolute;width:64px;height:64px;border-radius:50%;background:#eee;color:#21170e;border:5px solid #b78b38;font-size:20px}.act small{display:block;font-size:9px}.up{left:56px;top:0}.left{left:0;top:54px}.right{right:0;top:54px}.down{left:56px;bottom:0}#topbuttons{position:absolute;top:8px;left:50%;transform:translateX(-50%);display:flex;gap:6px}#topbuttons button{font-size:11px;padding:7px 9px}#overlay{position:absolute;inset:0;background:#090909eF;z-index:4;display:none;align-items:center;justify-content:center;padding:20px}#panel{width:min(100%,390px);background:#2c2118;border:4px ridge #c9a75e;padding:18px;text-align:center;max-height:90%;overflow:auto}#panel h2{color:#ffd76b;margin:0 0 12px}#panel p{font-size:13px;line-height:1.5}#panel button{margin:5px}.title{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:22px;background:radial-gradient(#59402c,#130d0b 75%)}.title h1{font-size:36px;line-height:1.05;color:#ffdb75;text-shadow:4px 4px #6d2920;margin:0 0 12px}.title p{max-width:320px;font-size:13px;line-height:1.5}.title button{font-size:18px;padding:13px 25px;background:#9a6828}.hint{color:#c7b99d;font-size:10px;line-height:1.5}
+</style></head><body><main id="game"><header id="hud"><span id="hp">❤ 5</span><span id="level">NIV 1</span><span id="gold">◆ 50</span><span id="mp">✦ 30</span></header><canvas id="scene" width="208" height="208"></canvas><section id="story"><strong id="speaker">Narrateur</strong><span id="line">Un nouveau royaume attend son héros.</span></section><section id="controls"><div id="topbuttons"><button id="bag">🎒 SAC</button><button id="save">SAUVER</button><button id="pause">Ⅱ</button></div><div id="pad"><div id="nub"></div></div><div id="actions"><button class="act up" data-act="magic">△<small>MAGIE</small></button><button class="act left" data-act="attack">□<small>FRAPPER</small></button><button class="act right" data-act="roll">○<small>ESQUIVE</small></button><button class="act down" data-act="interact">✕<small>AGIR</small></button></div></section><div id="overlay"><div id="panel"></div></div><div class="title" id="title"><h1>DYNASTIE<br>CRAFT WARRIORS</h1><p>Mort dans notre monde, tu renais dans un royaume oublié. Une princesse attend ton aide… et les gobelins approchent.</p><button id="start">NOUVELLE PARTIE</button><button id="resume" style="display:none">CONTINUER</button><p class="hint">Déplace-toi avec le joystick. □ attaque · △ magie · ○ esquive · ✕ parler / agir.</p></div></main>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id),c=$('scene'),g=c.getContext('2d');g.imageSmoothingEnabled=false;
+const S={map:'village',x:104,y:152,hp:5,max:5,mp:30,gold:50,lvl:1,xp:0,elem:0,inventory:['Potion'],quest:0,fox:false,paused:false};
+const maps={village:{w:32,h:32,base:0},forest:{w:40,h:36,base:1},home:{w:13,h:12,base:2},forge:{w:13,h:12,base:2},bar:{w:13,h:12,base:2}};
+const npcs=[{name:'Princesse Elara',map:'village',x:235,y:130,color:'#e7a6ca',talk:['Héros, notre village est menacé par les gobelins.','Va dans la forêt et rapporte-moi trois cristaux.'],id:'princess'},{name:'Gorn le forgeron',map:'village',x:75,y:75,color:'#d18a4d',talk:['Bienvenue à la forge. Une lame solide te sera utile.','Reviens avec 20 pièces pour améliorer ton arme.'],id:'smith'},{name:'Mira',map:'village',x:175,y:185,color:'#75c8df',talk:['La forêt commence au nord-est. Méfie-toi des gobelins.'],id:'mira'}];
+const foes=[];let joy={x:0,y:0},last=0,dialog=0,enemyClock=0,attackCd=0,magicCd=0,roll=0,toast='',toastTime=0;
+const colors=['#e0b46b','#477d3b','#8b6a48'];
+function say(w,t){$('speaker').textContent=w;$('line').textContent=t}
+function hud(){$('hp').textContent='❤ '+S.hp+'/'+S.max;$('level').textContent='NIV '+S.lvl;$('gold').textContent='◆ '+S.gold;$('mp').textContent='✦ '+S.mp}
+function tile(x,y){let m=maps[S.map];if(x<0||y<0||x>=m.w||y>=m.h)return 2;if(S.map==='village'){if(x<2||y<2||x>29||y>29)return 2;if((x>5&&x<10&&y>5&&y<10)||(x>19&&x<24&&y>4&&y<9))return 3;if(y===15||x===15)return 4;return ((x*17+y*11)%31===0)?5:0}if(S.map==='forest'){if(x<2||y<2||x>37||y>33)return 2;if(x>8&&x<30&&y>8&&y<29&&((x*13+y*7)%9<3))return 3;if(x<7||y<6)return 3;return (x*7+y*3)%19===0?5:1}if(x===0||y===0||x===12||y===11)return 2;return 6}
+function solid(t){return t===2||t===3}
+function drawTile(t,x,y){let p=x*16,q=y*16;g.fillStyle=['#579344','#b9a16d','#342a35','#286eaa','#b58c54','#e4d36b','#8d694b'][t]||'#000';g.fillRect(p,q,16,16);if(t===0||t===1){g.fillStyle=t===0?'#72b654':'#d2b879';for(let i=0;i<3;i++)g.fillRect(p+(x*7+y*3+i*5)%15,q+(y*9+x*2+i*4)%15,2,1)}if(t===3){g.fillStyle='#315d8d';g.fillRect(p+3,q+3,10,10)}if(t===2){g.fillStyle='#4a3d35';g.fillRect(p+2,q+2,12,12)}}
+function actor(x,y,color,hero=false){let sx=Math.round(x),sy=Math.round(y);g.fillStyle='#17120f';g.fillRect(sx-5,sy+4,11,3);g.fillStyle=color;g.fillRect(sx-5,sy-8,10,12);g.fillStyle='#f0c49a';g.fillRect(sx-4,sy-14,8,7);g.fillStyle=hero?'#4a2c1b':'#34231c';g.fillRect(sx-5,sy-15,10,3);g.fillStyle='#fff';g.fillRect(sx-2,sy-11,2,2)}
+function draw(){g.clearRect(0,0,208,208);let px=Math.floor(S.x/16),py=Math.floor(S.y/16),ox=Math.max(0,Math.min(maps[S.map].w-13,px-6)),oy=Math.max(0,Math.min(maps[S.map].h-13,py-6));for(let y=0;y<13;y++)for(let x=0;x<13;x++)drawTile(tile(ox+x,oy+y),x,y);if(S.map==='village'){for(let n of npcs)if(n.map===S.map)actor(n.x-ox*16,n.y-oy*16,n.color)}if(S.map==='forest')for(let e of foes)if(!e.dead)actor(e.x-ox*16,e.y-oy*16,'#85a84a');actor(S.x-ox*16,S.y-oy*16,'#477bc2',true);if(toastTime>0){g.fillStyle='#111';g.fillRect(18,8,172,20);g.fillStyle='#ffe17d';g.font='8px monospace';g.fillText(toast,23,21)}}
+function sayToast(t){toast=t;toastTime=100}
+function move(dx,dy){let nx=S.x+dx,ny=S.y+dy;if(!solid(tile(Math.floor(nx/16),Math.floor(S.y/16))))S.x=nx;if(!solid(tile(Math.floor(S.x/16),Math.floor(ny/16))))S.y=ny;S.x=Math.max(20,Math.min((maps[S.map].w-2)*16,S.x));S.y=Math.max(20,Math.min((maps[S.map].h-2)*16,S.y))}
+function changeMap(m,x,y){S.map=m;S.x=x;S.y=y;foes.length=0;if(m==='forest')spawn();say('Narrateur',m==='forest'?'La forêt est dangereuse. Cherche les cristaux et surveille les gobelins.':'Tu es de retour au village.');}
+function spawn(){for(let i=0;i<5;i++)foes.push({x:100+i*35,y:100+(i%3)*28,hp:24,dead:false})}
+function nearest(arr,dist){let best=null,bd=dist;for(let a of arr){let d=Math.hypot(a.x-S.x,a.y-S.y);if(d<bd){best=a;bd=d}}return best}
+function interact(){let n=nearest(npcs.filter(n=>n.map===S.map),35);if(n){let idx=dialog++%n.talk.length;say(n.name,n.talk[idx]);if(n.id==='princess'&&S.quest===0)S.quest=1;return}if(S.map==='village'&&S.x>220&&S.y<80){changeMap('forest',180,300);return}if(S.map==='forest'&&S.y<35){changeMap('village',240,240);return}if(S.map==='village'&&S.x<70&&S.y<70){changeMap('forge',96,150);return}if(S.map==='forge'&&S.y>150){changeMap('village',85,95);return}say('Narrateur','Il n’y a rien à faire ici pour le moment.')}
+function attack(){if(attackCd>0)return;attackCd=24;let e=nearest(foes.filter(e=>!e.dead),42);if(e){e.hp-=12+S.lvl*2;say('Combat','Tu frappes le gobelin !');if(e.hp<=0){e.dead=true;S.gold+=8;S.xp+=12;if(S.quest===1)S.quest=2;say('Combat','Gobelin vaincu ! +8 pièces et +12 XP.');if(S.xp>=S.lvl*30){S.xp=0;S.lvl++;S.max++;S.hp=S.max;say('Niveau supérieur','Tu es maintenant niveau '+S.lvl+' !')}hud()}}}
+function magic(){if(magicCd>0||S.mp<8){say('Magie','Pas assez de mana.');return}S.mp-=8;magicCd=40;let e=nearest(foes.filter(e=>!e.dead),85);if(e){e.hp-=22;if(e.hp<=0){e.dead=true;S.gold+=8;S.xp+=12}say('Magie','Éclair élémentaire !')}else say('Magie','Une étincelle illumine tes mains.');hud()}
+function rollDodge(){roll=12;say('Héros','Esquive !')}
+function openPanel(title,body,buttons){$('panel').innerHTML='<h2>'+title+'</h2><p>'+body+'</p>'+buttons.map(b=>'<button data-panel="'+b.id+'">'+b.label+'</button>').join('');$('overlay').style.display='flex'}
+function closePanel(){$('overlay').style.display='none'}
+$('panel').addEventListener('click',e=>{let b=e.target.closest('[data-panel]');if(!b)return;let a=b.dataset.panel;if(a==='close')closePanel();if(a==='potion'){if(S.inventory.includes('Potion')&&S.hp<S.max){S.inventory.splice(S.inventory.indexOf('Potion'),1);S.hp=Math.min(S.max,S.hp+2);hud();say('Sac','Potion utilisée.')}closePanel()}if(a==='quest'){say('Princesse Elara',S.quest>=2?'Tu as repoussé les gobelins ! Le royaume te remercie.':'Élimine les gobelins dans la forêt et reviens me voir.');closePanel()}});
+function inventory(){openPanel('Sac du héros','Pièces : '+S.gold+' · Niveau : '+S.lvl+'<br>Objets : '+(S.inventory.join(', ')||'vide')+'<br>Mission : '+(S.quest===0?'Rencontrer la princesse':S.quest===1?'Explorer la forêt': 'Vaincre les gobelins'),[{id:'potion',label:'Utiliser potion'},{id:'quest',label:'Mission'},{id:'close',label:'Fermer'}])}
+function save(){localStorage.setItem('dcw-save',JSON.stringify(S));say('Sauvegarde','Ta progression a été sauvegardée sur cet appareil.');sayToast('Partie sauvegardée')}
+function load(){try{let d=JSON.parse(localStorage.getItem('dcw-save'));if(d){Object.assign(S,d);return true}}catch(e){}return false}
+function loop(ts){let dt=Math.min(32,ts-last||16);last=ts;if(!S.paused&&$('overlay').style.display!=='flex'&&$('title').style.display==='none'){let dx=joy.x,dy=joy.y;if(Math.abs(dx)+Math.abs(dy)>.08)move(dx*dt*.11,dy*dt*.11);if(S.map==='forest'){enemyClock+=dt;if(enemyClock>850){enemyClock=0;for(let e of foes)if(!e.dead&&Math.hypot(e.x-S.x,e.y-S.y)<75){S.hp=Math.max(0,S.hp-1);say('Combat','Un gobelin te blesse !');if(!S.hp){S.hp=S.max;sayToast('Tu reprends ton souffle au village');changeMap('village',240,240)}hud();break}}}if(attackCd>0)attackCd--;if(magicCd>0)magicCd--;if(roll>0)roll--;if(toastTime>0)toastTime--}draw();requestAnimationFrame(loop)}
+const pad=$('pad'),nub=$('nub');let pointer=null;function setJoy(e){let r=pad.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),lim=r.width*.34,m=Math.hypot(dx,dy);if(m>lim){dx*=lim/m;dy*=lim/m}joy={x:dx/lim,y:dy/lim};nub.style.transform='translate('+dx+'px,'+dy+'px)'}pad.addEventListener('pointerdown',e=>{pointer=e.pointerId;pad.setPointerCapture(pointer);setJoy(e)});pad.addEventListener('pointermove',e=>{if(e.pointerId===pointer)setJoy(e)});function end(e){if(e.pointerId===pointer){pointer=null;joy={x:0,y:0};nub.style.transform=''}}pad.addEventListener('pointerup',end);pad.addEventListener('pointercancel',end);
+document.querySelectorAll('[data-act]').forEach(b=>b.addEventListener('pointerdown',e=>{e.preventDefault();let a=b.dataset.act;if(a==='attack')attack();if(a==='magic')magic();if(a==='roll')rollDodge();if(a==='interact')interact();b.classList.add('active')}));document.querySelectorAll('[data-act]').forEach(b=>b.addEventListener('pointerup',()=>b.classList.remove('active')));
+$('bag').onclick=inventory;$('save').onclick=save;$('pause').onclick=()=>{S.paused=!S.paused;say('Jeu',S.paused?'Jeu en pause.':'La quête reprend.')};
+$('start').onclick=()=>{$('title').style.display='none';S.map='village';S.x=104;S.y=152;S.hp=S.max;spawn();say('Narrateur','Bienvenue dans Dynastie Craft Warriors. Trouve la princesse au centre du village.');hud()};$('resume').onclick=()=>{load();$('title').style.display='none';if(S.map==='forest')spawn();hud()};
+if(localStorage.getItem('dcw-save'))$('resume').style.display='inline-block';hud();requestAnimationFrame(loop);
+})();
+</script></body></html>
