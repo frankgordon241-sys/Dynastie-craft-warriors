@@ -120,7 +120,7 @@ function drawHomeInterior(ox,oy){ctx.fillStyle='#71513a';ctx.fillRect(0,0,320,32
 function draw(){let px=Math.floor(S.x),py=Math.floor(S.y),ox=Math.max(0,Math.min(MAP[S.map].w*16-320,px-160)),oy=Math.max(0,Math.min(MAP[S.map].h*16-320,py-160));ctx.clearRect(0,0,320,320);
  if(S.map==='home'){drawHomeInterior(ox,oy);drawCharacter(S.x-ox,S.y-oy,'#4d85c4',Math.floor(dayClock/12),true,0);ctx.fillStyle='#ffe3a0';ctx.font='9px Georgia';ctx.fillText('X : dormir   □ : fabriquer',12,15);if(toastFrames>0){ctx.fillStyle='#17120de8';ctx.fillRect(48,8,224,24);ctx.fillStyle='#ffe5a0';ctx.textAlign='center';ctx.fillText(toast,160,24);ctx.textAlign='left'}return}
  for(let y=0;y<21;y++)for(let x=0;x<21;x++)drawGround(Math.floor(ox/16)+x,Math.floor(oy/16)+y,x*16-(ox%16),y*16-(oy%16));
- if(S.map==='village')drawVillageDetails(ox,oy);if(S.map==='forest')drawForestDetails(ox,oy);
+ if(S.map==='village'){drawVillageDetails(ox,oy);drawVillageLife(ox,oy)}if(S.map==='forest')drawForestDetails(ox,oy);
  if(S.map==='village'&&storyStage<2)drawHooded(ox,oy);
  if(S.map==='village'||S.map==='forest')npcs.forEach(n=>{if(n.map===S.map)drawCharacter(n.x-ox,n.y-oy,n.color,Math.floor(n.anim),false,n.dir)});
  enemies.forEach(e=>{if(!e.dead)drawCharacter(e.x-ox,e.y-oy,'#91a84c',Math.floor(e.anim),false,0)});
