@@ -21,7 +21,7 @@ h1{color:#ffe2a1;line-height:1.08;font-size:clamp(28px,7vw,42px);margin:0}.desc{
 @media (orientation:portrait){body.playing #rotateNotice{display:grid}body.playing #top,body.playing #help,body.playing #controls{display:none}}
 @media (orientation:landscape){#controls{height:125px}#stick{width:104px;height:104px}#knob{left:29px;top:29px}#run{width:70px;height:70px}}
 </style></head><body><div id="game"></div>
-<div id="top"><div class="tag">DYNASTIE CRAFT WARRIORS</div><div class="tag">BÊTA 1.0 · 3D</div></div><div id="help">Joystick : déplacement · COURIR : accélérer</div>
+<div id="top"><div class="tag">DYNASTIE CRAFT WARRIORS</div><div class="tag">BÊTA 1.0 · 3D</div></div><div id="help">Joystick : déplacement · Glisse le doigt sur l’écran : tourner la caméra</div>
 <div id="assetStatus">Ressources 3D gratuites : chargement…</div><div id="controls"><div id="stick"><div id="knob"></div></div><button id="run">COURIR</button></div>
 <div id="rotateNotice"><div class="card"><span class="symbol">↻</span><strong>Tourne ton téléphone</strong><p>Dynastie Craft Warriors se joue en mode paysage. Mets ton écran à l’horizontale pour continuer.</p></div></div><div id="overlay"><div id="panel"><h1>DYNASTIE<br>CRAFT WARRIORS</h1><div class="desc">BÊTA 1.0 — PREMIÈRE EXPLORATION<br>Entre dans ce monde fantastique et teste les déplacements de ton héros.</div><button id="play">ENTRER DANS LE MONDE</button><div id="note">Prototype 3D jouable · Caméra à la troisième personne<br>Connexion Internet requise pour charger Three.js.</div></div></div>
 <script type="importmap">
@@ -54,7 +54,7 @@ for(const x of [-.22,.22]){const p=new THREE.Group();p.position.set(x,.95,0);her
 hero.position.set(0,0,8);
 // Ressources 3D externes gratuites (Gobkit, licence CC0 1.0).
 // Les personnages provisoires restent visibles si le téléchargement échoue.
-const gltfLoader=new GLTFLoader(),assetMixers=[];
+const gltfLoader=new GLTFLoader();
 const assetStatus=document.querySelector('#assetStatus');
 let loadedAssets=0,failedAssets=0;
 function fitModel(model,targetHeight){
@@ -70,12 +70,7 @@ function loadFreeCharacter(url,parent,targetHeight,replacePlaceholder=false,posi
   if(position)parent.position.set(position.x,position.y,position.z);
   parent.add(model);
   if(replacePlaceholder){for(const child of [...parent.children])if(child!==model)child.visible=false;}
-  if(gltf.animations?.length){
-   const mixer=new THREE.AnimationMixer(model);assetMixers.push(mixer);
-   const idle=THREE.AnimationClip.findByName(gltf.animations,'idle')||gltf.animations[0];
-   if(idle)mixer.clipAction(idle).play();
-  }
-  loadedAssets++;assetStatus.textContent=loadedAssets+' personnage(s) 3D gratuit(s) chargé(s) · CC0';
+  // Pas d'animation automatique pour le moment : le héros reste immobile à l'arrêt.\n  loadedAssets++;assetStatus.textContent=loadedAssets+' personnage(s) 3D gratuit(s) chargé(s) · CC0';
  },undefined,error=>{
   failedAssets++;assetStatus.textContent='Ressources 3D : '+loadedAssets+' chargée(s) · '+failedAssets+' indisponible(s)';
   console.warn('Ressource 3D non chargée :',url,error);
@@ -83,12 +78,7 @@ function loadFreeCharacter(url,parent,targetHeight,replacePlaceholder=false,posi
 }
 // Héros de remplacement : personnage fantasy humanoïde animé.
 loadFreeCharacter('https://gobkit.com/freebies/human013/Prince.glb',hero,2.65,true);
-// Princesse royale en personnage non jouable, près de la place du village.
-const princess=new THREE.Group();scene.add(princess);
-loadFreeCharacter('https://gobkit.com/freebies/human013/CrownedPrincess.glb',princess,2.35,false,{x:4,y:0,z:-8});
-// Un commandant orc sert de premier adversaire provisoire en attendant un vrai roi gobelin.
-const goblinChief=new THREE.Group();scene.add(goblinChief);
-loadFreeCharacter('https://gobkit.com/freebies/human006/OrcWarbandChampion.glb',goblinChief,3.5,false,{x:0,y:0,z:-47});
+// Pour cette étape, seul le héros est présent : aucun PNJ ni gobelin.
 // Arbres 3D CC0 pour enrichir le bord de forêt.
 for(const [url,x,z,h] of [
  ['https://gobkit.com/freebies/environment/TreeHigh001.glb',-24,-35,5],
@@ -106,9 +96,68 @@ function setMove(e){const dx=e.clientX-cx,dy=e.clientY-cy,L=Math.hypot(dx,dy),k=
 stick.addEventListener('pointerdown',e=>{pointer=e.pointerId;stick.setPointerCapture(pointer);const r=stick.getBoundingClientRect();cx=r.left+r.width/2;cy=r.top+r.height/2;setMove(e)});stick.addEventListener('pointermove',e=>{if(e.pointerId===pointer)setMove(e)});
 function reset(e){if(e.pointerId!==pointer)return;pointer=null;moveX=moveY=0;knob.style.transform='translate(0,0)'}stick.addEventListener('pointerup',reset);stick.addEventListener('pointercancel',reset);
 const run=document.querySelector('#run');run.addEventListener('pointerdown',e=>{sprinting=true;run.setPointerCapture(e.pointerId)});for(const ev of ['pointerup','pointercancel','lostpointercapture'])run.addEventListener(ev,()=>sprinting=false);
-const clock=new THREE.Clock();function tick(){requestAnimationFrame(tick);const dt=Math.min(clock.getDelta(),.04);if(active){let x=moveX,y=moveY;if(key.w||key.arrowup)y=-1;if(key.s||key.arrowdown)y=1;if(key.a||key.arrowleft)x=-1;if(key.d||key.arrowright)x=1;const l=Math.hypot(x,y);if(l>.1){x/=Math.max(1,l);y/=Math.max(1,l);const speed=sprinting?8:4.2;hero.rotation.y=Math.atan2(x,y);const nx=hero.position.x+x*speed*dt,nz=hero.position.z+y*speed*dt;let hit=obstacles.some(o=>Math.hypot(nx-o[0],nz-o[1])<o[2]);if(!hit){hero.position.x=THREE.MathUtils.clamp(nx,-42,42);hero.position.z=THREE.MathUtils.clamp(nz,-55,38)}walking+=dt*(sprinting?13:8);legs[0].rotation.x=Math.sin(walking)*.62;legs[1].rotation.x=-Math.sin(walking)*.62;arms[0].rotation.x=-Math.sin(walking)*.45;arms[1].rotation.x=Math.sin(walking)*.45}else{legs.forEach(p=>p.rotation.x=THREE.MathUtils.damp(p.rotation.x,0,9,dt));arms.forEach(p=>p.rotation.x=THREE.MathUtils.damp(p.rotation.x,0,9,dt))}
-const offset=new THREE.Vector3(0,4.1,7.4).applyAxisAngle(new THREE.Vector3(0,1,0),hero.rotation.y);camera.position.lerp(new THREE.Vector3(hero.position.x+offset.x,hero.position.y+offset.y,hero.position.z+offset.z),1-Math.exp(-5*dt));camera.lookAt(hero.position.x,1.5,hero.position.z)}
-for(const mixer of assetMixers)mixer.update(dt);renderer.render(scene,camera)}tick();
+let cameraYaw=0,cameraPitch=.34,cameraDistance=7.8;
+let lookPointer=null,lastLookX=0,lastLookY=0;
+renderer.domElement.addEventListener('pointerdown',e=>{
+ if(!active || e.clientX<innerWidth*.28)return;
+ lookPointer=e.pointerId;lastLookX=e.clientX;lastLookY=e.clientY;
+ renderer.domElement.setPointerCapture(e.pointerId);
+});
+renderer.domElement.addEventListener('pointermove',e=>{
+ if(e.pointerId!==lookPointer)return;
+ const dx=e.clientX-lastLookX,dy=e.clientY-lastLookY;
+ lastLookX=e.clientX;lastLookY=e.clientY;
+ cameraYaw-=dx*.006;
+ cameraPitch=THREE.MathUtils.clamp(cameraPitch+dy*.004,.12,1.05);
+});
+function stopLook(e){if(e.pointerId===lookPointer)lookPointer=null}
+renderer.domElement.addEventListener('pointerup',stopLook);
+renderer.domElement.addEventListener('pointercancel',stopLook);
+const clock=new THREE.Clock();
+function tick(){
+ requestAnimationFrame(tick);
+ const dt=Math.min(clock.getDelta(),.04);
+ if(active){
+  let sx=moveX,sy=moveY;
+  if(key.w||key.arrowup)sy=-1;
+  if(key.s||key.arrowdown)sy=1;
+  if(key.a||key.arrowleft)sx=-1;
+  if(key.d||key.arrowright)sx=1;
+  const magnitude=Math.hypot(sx,sy);
+  if(magnitude>.12){
+   if(magnitude>1){sx/=magnitude;sy/=magnitude}
+   const forward=-sy,right=sx;
+   const dx=right*Math.cos(cameraYaw)-forward*Math.sin(cameraYaw);
+   const dz=-right*Math.sin(cameraYaw)-forward*Math.cos(cameraYaw);
+   const speed=sprinting?7.2:3.8;
+   const nx=hero.position.x+dx*speed*dt,nz=hero.position.z+dz*speed*dt;
+   const hit=obstacles.some(o=>Math.hypot(nx-o[0],nz-o[1])<o[2]);
+   if(!hit){
+    hero.position.x=THREE.MathUtils.clamp(nx,-42,42);
+    hero.position.z=THREE.MathUtils.clamp(nz,-55,38);
+   }
+   hero.rotation.y=Math.atan2(dx,-dz);
+   walking+=dt*(sprinting?12:7);
+   legs[0].rotation.x=Math.sin(walking)*.48;
+   legs[1].rotation.x=-Math.sin(walking)*.48;
+   arms[0].rotation.x=-Math.sin(walking)*.3;
+   arms[1].rotation.x=Math.sin(walking)*.3;
+  }else{
+   legs.forEach(p=>p.rotation.x=THREE.MathUtils.damp(p.rotation.x,0,10,dt));
+   arms.forEach(p=>p.rotation.x=THREE.MathUtils.damp(p.rotation.x,0,10,dt));
+  }
+  const horizontal=Math.cos(cameraPitch)*cameraDistance;
+  const desired=new THREE.Vector3(
+   hero.position.x+Math.sin(cameraYaw)*horizontal,
+   hero.position.y+1.6+Math.sin(cameraPitch)*cameraDistance,
+   hero.position.z+Math.cos(cameraYaw)*horizontal
+  );
+  camera.position.lerp(desired,1-Math.exp(-8*dt));
+  camera.lookAt(hero.position.x,1.45,hero.position.z);
+ }
+ renderer.render(scene,camera);
+}
+tick();
 function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.5))}addEventListener('resize',resize);
 async function enterGame(){
  document.querySelector('#overlay').style.display='none';
