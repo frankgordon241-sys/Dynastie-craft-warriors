@@ -147,7 +147,7 @@ function drawVillageDetails(ox,oy){const houses=[[18,17,112,88,'#854334'],[7,8,9
 const originalInteract=interact;
 interact=function(){
  if(S.map==='home'){const bed=Math.hypot(S.x-82,S.y-88),bench=Math.hypot(S.x-226,S.y-157);if(bed<45){S.hp=S.maxHp;S.mp=S.maxMp;updateHud();say('Narrateur','Tu te reposes dans ton lit. Tes PV et ta magie sont entièrement restaurés.');toastMsg('PV et magie restaurés');return}if(bench<55){showPanel('Établi de fabrication','Choisis une création. Les recettes seront enrichies au fil de l’aventure.',[{id:'craftSword',label:'ÉPÉE EN BOIS · 20 PO'},{id:'craftPotion',label:'POTION · 10 PO'},{id:'close',label:'FERMER'}]);return}if(S.y>240){transition('village',344,375);say('Narrateur','Tu ressors de ta maison. Le village t’attend.');return}say('Maison','Un foyer simple, avec un lit et un établi.');return}
- if(S.map==='village'&&storyStage<3){if(storyStage<2){storyAdvance();return}}
+ if(S.map==='village'&&storyStage<3){storyAdvance();return}
  if(S.map==='village'&&Math.hypot(S.x-344,S.y-360)<68){transition('home',160,220);say('Narrateur','Voici ta maison. Tu peux dormir pour restaurer tes PV et ta magie, ou fabriquer de l’équipement à l’établi.');toastMsg('Maison : lit et établi de craft');return}
  if(S.map==='village'&&S.x>920&&S.y<470){transition('forest',510,870);return}
  if(S.map==='forest'&&S.y>930){transition('village',930,470);return}
