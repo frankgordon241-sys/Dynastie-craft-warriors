@@ -26,12 +26,33 @@
 #splash .logo,#mainMenu .logo{background:linear-gradient(#fff2bd,#d9a64f);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 4px 5px #24170e,0 0 18px #111}
 #splash button,#mainMenu button{background:linear-gradient(#f5d77b,#9d5b1e 55%,#4b2916);border:3px ridge #ffe7a0;box-shadow:0 4px 0 #26170d,0 0 16px #000;font-size:17px;letter-spacing:.5px}
 #mainMenu{background-position:center!important}
-</style></head>
+</style>
+<style id="mobile-controls-fix">
+html,body{overscroll-behavior:none}
+#app{width:100vw;max-width:600px;height:100dvh}
+#controls{height:clamp(132px,22dvh,180px);padding-bottom:env(safe-area-inset-bottom)}
+#view{height:calc(100% - 49px - 58px - clamp(132px,22dvh,180px));min-height:150px}
+#pad{width:clamp(112px,27vw,142px);height:clamp(112px,27vw,142px);left:12px;bottom:10px;border-width:4px;touch-action:none}
+#nub{width:46px;height:46px;left:calc(50% - 23px);top:calc(50% - 23px)}
+#actions{width:176px;height:144px;right:12px;bottom:7px}
+#actions button{width:56px;height:56px;padding:0;border-radius:50%;font:900 27px/1 Arial,sans-serif;color:#fff;text-shadow:0 2px 3px #000;background:radial-gradient(circle at 32% 25%,#6c7781,#202a34 72%);border:3px solid #c5b17a;box-shadow:0 4px 0 #111, inset 0 0 0 2px #ffffff30;touch-action:none}
+#actions button:active{filter:brightness(1.35);transform:scale(.94)}
+#actions .a-up{left:60px;top:0}
+#actions .a-left{left:0;top:49px}
+#actions .a-right{right:0;top:49px}
+#actions .a-down{left:60px;bottom:0}
+#actions small{display:none}
+#quick{top:5px}
+#quick button{font-size:10px;padding:5px 7px}
+.screen{padding:20px}
+.screen button{touch-action:manipulation}
+</style>
+</head>
 <body><main id="app">
 <header id="hud"><span id="hp">❤ 5/5</span><span id="lv">NIV. 1</span><span id="coins">◆ 50</span><span id="mana">✦ 30</span><span id="area">VILLAGE</span></header>
 <canvas id="view" width="320" height="320"></canvas>
 <section id="dialog"><strong id="speaker">Narrateur</strong><span id="line">Un royaume oublié attend son héros.</span></section>
-<section id="controls"><div id="quick"><button id="bag">SAC</button><button id="saveQuick">SAUVER</button><button id="pause">Ⅱ</button></div><div id="pad"><div id="nub"></div></div><div id="actions" aria-label="Commandes"><button class="a-up" data-act="jump" aria-label="X sauter et bloquer">X<small>SAUT / GARDE</small></button><button class="a-left" data-act="attack" aria-label="Carré frapper">□<small>FRAPPER</small></button><button class="a-right" data-act="magic" aria-label="Triangle magie">△<small>MAGIE</small></button><button class="a-down" data-act="roll" aria-label="Rond esquiver">○<small>ESQUIVE</small></button></div></section>
+<section id="controls"><div id="quick"><button id="bag">SAC</button><button id="saveQuick">SAUVER</button><button id="pause">Ⅱ</button></div><div id="pad"><div id="nub"></div></div><div id="actions" aria-label="Commandes"><button class="a-up" data-act="block" aria-label="X">×</button><button class="a-left" data-act="attack" aria-label="Carré">□</button><button class="a-right" data-act="magic" aria-label="Triangle">△</button><button class="a-down" data-act="roll" aria-label="Rond">○</button></div></section>
 <div id="overlay"><div id="panel"></div></div>
 <section class="screen" id="splash"><div class="castle-silhouette">♜　🏰　♜</div><i class="cloud cloud-a"></i><i class="cloud cloud-b"></i><i class="cloud cloud-c"></i><div class="crest">⚔️</div><h1 class="logo">DYNASTIE<br>CRAFT WARRIORS</h1><p class="subtitle">Un royaume à reconstruire. Une dynastie à protéger. Une légende à écrire.</p><button id="goMenu">JOUER</button><div class="foot">UNE AVENTURE RPG EN PIXEL ART</div></section>
 <section class="screen hidden" id="mainMenu"><div class="crest">🏰</div><h1 class="logo">DYNASTIE<br>CRAFT WARRIORS</h1><p class="subtitle">Que ton aventure commence…</p><button id="newGame">NOUVELLE PARTIE</button><button id="openSaves">SAUVEGARDES</button><button class="minor" id="backTitle">RETOUR</button><div class="foot">Les sauvegardes restent sur cet appareil</div></section>
@@ -198,6 +219,43 @@ function drawVillageLife(ox,oy){
  // Fanions, paniers et jardinières donnent du relief aux rues.
  for(let i=0;i<4;i++){let x=(26+i*4)*16-ox,y=25*16-oy;ctx.fillStyle='#5b3c25';ctx.fillRect(x,y,2,25);ctx.fillStyle=['#a94b3d','#d7b45d','#527e91','#668c55'][i];ctx.beginPath();ctx.moveTo(x+2,y+2);ctx.lineTo(x+17,y+7);ctx.lineTo(x+2,y+13);ctx.fill()}
  for(let i=0;i<5;i++){let x=(8+i*10)*16-ox,y=46*16-oy;ctx.fillStyle='#8b542f';ctx.fillRect(x,y,13,9);ctx.fillStyle='#4c8a43';ctx.fillRect(x+2,y-5,3,7);ctx.fillRect(x+7,y-7,3,9)}
+}
+
+
+/* Correctifs commandes et démarrage */
+$('goMenu').onclick=()=>{ newGame(); };
+$('newGame').onclick=()=>{ newGame(); };
+const actionRoot=$('actions');
+if(actionRoot){
+ actionRoot.querySelectorAll('button').forEach(b=>{
+  const fresh=b.cloneNode(true); b.replaceWith(fresh);
+  fresh.addEventListener('pointerdown',e=>{
+   e.preventDefault(); e.stopPropagation();
+   if(fresh.dataset.act==='block'){blockHeld=true;return;}
+   if(fresh.dataset.act==='attack')attack();
+   if(fresh.dataset.act==='magic')magic();
+   if(fresh.dataset.act==='roll')dodge();
+  });
+  const release=()=>{if(fresh.dataset.act==='block')blockHeld=false;};
+  fresh.addEventListener('pointerup',release);
+  fresh.addEventListener('pointercancel',release);
+  fresh.addEventListener('lostpointercapture',release);
+  fresh.addEventListener('contextmenu',e=>e.preventDefault());
+ });
+}
+const pad=$('pad');
+if(pad){
+ let activePadPointer=null;
+ const resetPad=()=>{activePadPointer=null;joystick={x:0,y:0};$('nub').style.transform='translate(0,0)'};
+ pad.addEventListener('pointerdown',e=>{
+  e.preventDefault(); activePadPointer=e.pointerId;
+  try{pad.setPointerCapture(e.pointerId)}catch(_){}
+  setJoy(e);
+ });
+ pad.addEventListener('pointermove',e=>{if(e.pointerId===activePadPointer){e.preventDefault();setJoy(e)}});
+ pad.addEventListener('pointerup',e=>{if(e.pointerId===activePadPointer)resetPad()});
+ pad.addEventListener('pointercancel',resetPad);
+ pad.addEventListener('lostpointercapture',resetPad);
 }
 
 makeNpcs();updateHud();requestAnimationFrame(loop);
