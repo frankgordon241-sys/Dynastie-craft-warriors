@@ -253,8 +253,6 @@ function drawVillageLife(ox,oy){
 
 
 /* Commandes tactiles corrigées : noms distincts, aucun doublon JS */
-$('goMenu').addEventListener('click',e=>{e.preventDefault();newGame()});
-$('newGame').addEventListener('click',e=>{e.preventDefault();newGame()});
 const actionRootFix=$('actions');
 actionRootFix.querySelectorAll('[data-act]').forEach(btn=>{
  const act=btn.dataset.act;
