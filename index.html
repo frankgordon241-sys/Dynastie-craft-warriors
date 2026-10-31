@@ -82,7 +82,7 @@ button{-webkit-tap-highlight-color:transparent}
 <header id="hud"><span id="hp">❤ 5/5</span><span id="lv">NIV. 1</span><span id="coins">◆ 50</span><span id="mana">✦ 30</span><span id="area">VILLAGE</span></header>
 <canvas id="view" width="320" height="320"></canvas>
 <section id="dialog"><strong id="speaker">Narrateur</strong><span id="line">Un royaume oublié attend son héros.</span></section>
-<section id="controls"><div id="quick"><button id="bag">SAC</button><button id="saveQuick">SAUVER</button><button id="pause">Ⅱ</button></div><div id="pad"><div id="nub"></div></div><div id="actions" aria-label="Commandes"><button class="a-up" data-act="block" aria-label="X">×</button><button class="a-left" data-act="attack" aria-label="Carré">□</button><button class="a-right" data-act="magic" aria-label="Triangle">△</button><button class="a-down" data-act="roll" aria-label="Rond">○</button></div></section>
+<section id="controls"><div id="quick"><button id="bag">SAC</button><button id="saveQuick">SAUVER</button><button id="pause">Ⅱ</button></div><div id="pad"><div id="nub"></div></div><div id="actions" aria-label="Commandes"><button class="a-up" data-act="block" aria-label="Croix">✕</button><button class="a-left" data-act="attack" aria-label="Carré">□</button><button class="a-right" data-act="magic" aria-label="Triangle">△</button><button class="a-down" data-act="roll" aria-label="Rond">○</button></div></section>
 <div id="overlay"><div id="panel"></div></div>
 <section class="screen" id="splash"><div class="castle-silhouette">♜　🏰　♜</div><i class="cloud cloud-a"></i><i class="cloud cloud-b"></i><i class="cloud cloud-c"></i><div class="crest">⚔️</div><h1 class="logo">DYNASTIE<br>CRAFT WARRIORS</h1><p class="subtitle">Un royaume à reconstruire. Une dynastie à protéger. Une légende à écrire.</p><button id="goMenu">JOUER</button><div class="foot">UNE AVENTURE RPG EN PIXEL ART</div></section>
 <section class="screen hidden" id="mainMenu"><div class="crest">🏰</div><h1 class="logo">DYNASTIE<br>CRAFT WARRIORS</h1><p class="subtitle">Que ton aventure commence…</p><button id="newGame">NOUVELLE PARTIE</button><button id="openSaves">SAUVEGARDES</button><button class="minor" id="backTitle">RETOUR</button><div class="foot">Les sauvegardes restent sur cet appareil</div></section>
@@ -145,8 +145,8 @@ function openMenu(){gameActive=false;paused=true;$('app').classList.remove('play
 $('goMenu').onclick=()=>newGame();$('backTitle').onclick=()=>{$('mainMenu').classList.add('hidden');$('splash').classList.remove('hidden')};$('newGame').onclick=()=>newGame();$('openSaves').onclick=showSaves;
 $('bag').onclick=inventory;$('saveQuick').onclick=()=>{if(!gameActive)return;saveSlot(1,'state');showSaves()};$('pause').onclick=()=>{paused=!paused;say('Jeu',paused?'Pause.':'La quête reprend.');if(paused)showPanel('Pause','Ta partie est en pause.',[{id:'resumePause',label:'REPRENDRE'}])};
 function setJoy(e){let r=$('pad').getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),lim=r.width*.32,m=Math.hypot(dx,dy);if(m>lim){dx*=lim/m;dy*=lim/m}joystick={x:dx/lim,y:dy/lim};$('nub').style.transform='translate('+dx+'px,'+dy+'px)'}
-$('pad').addEventListener('pointerdown',e=>{e.preventDefault();pointerId=e.pointerId;$('pad').setPointerCapture(pointerId);setJoy(e)});$('pad').addEventListener('pointermove',e=>{if(e.pointerId===pointerId)setJoy(e)});function stopJoy(e){if(e.pointerId===pointerId){pointerId=null;joystick={x:0,y:0};$('nub').style.transform='translate(0,0)'}}$('pad').addEventListener('pointerup',stopJoy);$('pad').addEventListener('pointercancel',stopJoy);$('pad').addEventListener('lostpointercapture',()=>{pointerId=null;joystick={x:0,y:0}});
-document.querySelectorAll('[data-act]').forEach(b=>{b.addEventListener('pointerdown',e=>{e.preventDefault();let a=b.dataset.act;if(a==='attack')attack();if(a==='magic')magic();if(a==='roll')dodge();if(a==='interact')interact()})});
+
+
 window.addEventListener('keydown',e=>{if(!gameActive||paused)return;let k=e.key.toLowerCase();if(k==='arrowup'||k==='w')joystick.y=-1;if(k==='arrowdown'||k==='s')joystick.y=1;if(k==='arrowleft'||k==='a')joystick.x=-1;if(k==='arrowright'||k==='d')joystick.x=1;if(k===' ')attack();if(k==='e')interact();if(k==='q')magic()});window.addEventListener('keyup',e=>{let k=e.key.toLowerCase();if(['arrowup','w','arrowdown','s'].includes(k))joystick.y=0;if(['arrowleft','a','arrowright','d'].includes(k))joystick.x=0});
 function loop(ts){let dt=Math.min(40,ts-last||16);last=ts;if(gameActive&&!paused&&$('overlay').style.display!=='flex'){if(Math.abs(joystick.x)+Math.abs(joystick.y)>.03)movePlayer(joystick.x,joystick.y,dt);if(S.map==='village')updateNpcs(dt);if(S.map==='forest')updateEnemies(dt);S.playSeconds+=dt/1000;dayClock+=dt;if(attackCd>0)attackCd-=dt;if(magicCd>0)magicCd-=dt;if(rollTimer>0)rollTimer-=dt;if(toastFrames>0)toastFrames--}draw();requestAnimationFrame(loop)}
 
@@ -217,14 +217,10 @@ const panelClickOld=$('panel').onclick;
 $('panel').addEventListener('click',e=>{const b=e.target.closest('[data-panel]');if(!b)return;if(b.dataset.panel==='craftSword'){if(S.gold>=20){S.gold-=20;S.inventory.push('Épée en bois');say('Artisanat','Tu fabriques une épée en bois.');updateHud()}else say('Artisanat','Il te manque des pièces.');$('overlay').style.display='none'}if(b.dataset.panel==='craftPotion'){if(S.gold>=10){S.gold-=10;S.inventory.push('Potion');say('Artisanat','Une potion rejoint ton sac.');updateHud()}else say('Artisanat','Il te manque des pièces.');$('overlay').style.display='none'}});
 function jump(){jumpFlash=260;S.y=Math.max(24,S.y-2);say('Héros','Hop !');}
 function setBlock(v){blockHeld=v;if(v)say('Défense','Tu te protèges. Tu bloques les coups et les sorts frontaux.')}
-document.querySelectorAll('[data-act]').forEach(b=>{b.replaceWith(b.cloneNode(true))});
-document.querySelectorAll('[data-act]').forEach(b=>{const act=b.dataset.act;b.addEventListener('pointerdown',e=>{e.preventDefault();if(act==='jump'){jump();if(storyStage<3||S.map==='home')interact();setBlock(true)}if(act==='attack')attack();if(act==='magic')magic();if(act==='roll')dodge()});b.addEventListener('pointerup',()=>{if(act==='jump')setBlock(false)});b.addEventListener('pointercancel',()=>{if(act==='jump')setBlock(false)});b.addEventListener('contextmenu',e=>e.preventDefault())});
+
 window.addEventListener('keydown',e=>{if(!gameActive||paused)return;const k=e.key.toLowerCase();if(k==='x'){if(!e.repeat){jump();if(storyStage<3||S.map==='home')interact();setBlock(true)}}if(k==='z')attack();if(k==='c')magic();if(k==='v')dodge();});
 window.addEventListener('keyup',e=>{if(e.key.toLowerCase()==='x')setBlock(false)});
-const oldNewGame=newGame;
-newGame=function(){oldNewGame();S.x=512;S.y=512;storyStage=0;storyLineIndex=0;hooded.visible=true;hooded.x=535;hooded.y=480;beginStory();};
-const oldLoop=loop;
-loop=function(ts){oldLoop(ts)};
+
 
 
 function drawVillageLife(ox,oy){
@@ -252,7 +248,48 @@ function drawVillageLife(ox,oy){
 }
 
 
-/* Commandes tactiles corrigées : noms distincts, aucun doublon JS */
+/* Commandes tactiles : un seul gestionnaire par commande */
+const actionRootFix=$('actions');
+actionRootFix.querySelectorAll('[data-act]').forEach(btn=>{
+ const act=btn.dataset.act;
+ const down=e=>{
+  e.preventDefault();
+  e.stopPropagation();
+  if(!gameActive||paused)return;
+  if(act==='block'){blockHeld=true;return}
+  if(act==='attack')attack();
+  else if(act==='magic')magic();
+  else if(act==='roll')dodge();
+ };
+ const up=()=>{if(act==='block')blockHeld=false};
+ btn.addEventListener('pointerdown',down,{passive:false});
+ btn.addEventListener('pointerup',up);
+ btn.addEventListener('pointercancel',up);
+ btn.addEventListener('lostpointercapture',up);
+ btn.addEventListener('contextmenu',e=>e.preventDefault());
+});
+let activePadPointerFix=null;
+const padFix=$('pad');
+function resetPadFix(){
+ activePadPointerFix=null;
+ joystick={x:0,y:0};
+ $('nub').style.transform='translate(0,0)';
+}
+padFix.addEventListener('pointerdown',e=>{
+ if(!gameActive||paused)return;
+ e.preventDefault();
+ activePadPointerFix=e.pointerId;
+ try{padFix.setPointerCapture(e.pointerId)}catch(_){}
+ setJoy(e);
+},{passive:false});
+padFix.addEventListener('pointermove',e=>{
+ if(e.pointerId!==activePadPointerFix)return;
+ e.preventDefault();
+ setJoy(e);
+},{passive:false});
+padFix.addEventListener('pointerup',e=>{if(e.pointerId===activePadPointerFix)resetPadFix()});
+padFix.addEventListener('pointercancel',resetPadFix);
+padFix.addEventListener('lostpointercapture',resetPadFix);
 const actionRootFix=$('actions');
 actionRootFix.querySelectorAll('[data-act]').forEach(btn=>{
  const act=btn.dataset.act;
