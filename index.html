@@ -13,10 +13,16 @@
 h1{color:#ffe2a1;line-height:1.08;font-size:clamp(28px,7vw,42px);margin:0}.desc{color:#d8ddcf;font-size:13px;line-height:1.5;margin:15px 0 21px}
 #play{border:1px solid #ffe3a2;border-radius:30px;padding:13px 24px;background:linear-gradient(145deg,#e4bd6c,#8b5c2d);color:#21180d;font-weight:900}
 #note{font-size:11px;color:#bac8b8;margin-top:16px}
+
+#rotateNotice{display:none;position:absolute;inset:0;z-index:20;background:#101b18f2;place-items:center;text-align:center;padding:24px}
+#rotateNotice .card{max-width:320px;border:1px solid #e8c77d99;border-radius:20px;padding:24px;background:#20352a}
+#rotateNotice .symbol{font-size:48px;display:block;margin-bottom:12px}
+@media (orientation:portrait){body.playing #rotateNotice{display:grid}body.playing #top,body.playing #help,body.playing #controls{display:none}}
+@media (orientation:landscape){#controls{height:125px}#stick{width:104px;height:104px}#knob{left:29px;top:29px}#run{width:70px;height:70px}}
 </style></head><body><div id="game"></div>
 <div id="top"><div class="tag">DYNASTIE CRAFT WARRIORS</div><div class="tag">BÊTA 1.0 · 3D</div></div><div id="help">Joystick : déplacement · COURIR : accélérer</div>
 <div id="controls"><div id="stick"><div id="knob"></div></div><button id="run">COURIR</button></div>
-<div id="overlay"><div id="panel"><h1>DYNASTIE<br>CRAFT WARRIORS</h1><div class="desc">BÊTA 1.0 — PREMIÈRE EXPLORATION<br>Entre dans ce monde fantastique et teste les déplacements de ton héros.</div><button id="play">ENTRER DANS LE MONDE</button><div id="note">Prototype 3D jouable · Caméra à la troisième personne<br>Connexion Internet requise pour charger Three.js.</div></div></div>
+<div id="rotateNotice"><div class="card"><span class="symbol">↻</span><strong>Tourne ton téléphone</strong><p>Dynastie Craft Warriors se joue en mode paysage. Mets ton écran à l’horizontale pour continuer.</p></div></div><div id="overlay"><div id="panel"><h1>DYNASTIE<br>CRAFT WARRIORS</h1><div class="desc">BÊTA 1.0 — PREMIÈRE EXPLORATION<br>Entre dans ce monde fantastique et teste les déplacements de ton héros.</div><button id="play">ENTRER DANS LE MONDE</button><div id="note">Prototype 3D jouable · Caméra à la troisième personne<br>Connexion Internet requise pour charger Three.js.</div></div></div>
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
 const root=document.querySelector('#game'),scene=new THREE.Scene();scene.background=new THREE.Color(0x9bc9dc);scene.fog=new THREE.Fog(0x9bc9dc,45,130);
@@ -52,5 +58,14 @@ const clock=new THREE.Clock();function tick(){requestAnimationFrame(tick);const 
 const offset=new THREE.Vector3(0,4.1,7.4).applyAxisAngle(new THREE.Vector3(0,1,0),hero.rotation.y);camera.position.lerp(new THREE.Vector3(hero.position.x+offset.x,hero.position.y+offset.y,hero.position.z+offset.z),1-Math.exp(-5*dt));camera.lookAt(hero.position.x,1.5,hero.position.z)}
 renderer.render(scene,camera)}tick();
 function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.5))}addEventListener('resize',resize);
-document.querySelector('#play').addEventListener('click',()=>{active=true;document.querySelector('#overlay').style.display='none'});
+async function enterGame(){
+ document.querySelector('#overlay').style.display='none';
+ try{if(!document.fullscreenElement && document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen()}
+ catch(e){}
+ try{if(screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape')}
+ catch(e){}
+ active=true;document.body.classList.add('playing');resize();
+}
+document.querySelector('#play').addEventListener('click',enterGame);
+addEventListener('orientationchange',()=>setTimeout(resize,150));
 </script></body></html>
